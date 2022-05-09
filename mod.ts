@@ -1,5 +1,7 @@
 import { Application, send } from "https://deno.land/x/oak@v10.2.1/mod.ts";
 
+import api from './api.ts';
+
 // create an instance of the Application class
 const app = new Application();
 
@@ -19,8 +21,10 @@ app.use(async (ctx, next) => {
     ctx.response.headers.set("X-Response-Time", `${delta}ms`);
 });
 
+app.use(api.routes());
+
 // serving static files
-app.use(async (ctx, next) => {
+app.use(async (ctx) => {
     const filePath = ctx.request.url.pathname;
     const fileWhitelist = [
         '/index.html',
@@ -33,21 +37,6 @@ app.use(async (ctx, next) => {
             root: `${Deno.cwd()}/public`,
         });
     }
-});
-
-// use method of oak
-app.use(async (ctx, next) => {
-    // send a response
-    ctx.response.body = `
-    {___     {__      {_         {__ __        {_
-    {_ {__   {__     {_ __     {__    {__     {_ __
-    {__ {__  {__    {_  {__     {__          {_  {__
-    {__  {__ {__   {__   {__      {__       {__   {__
-    {__   {_ {__  {______ {__        {__   {______ {__
-    {__    {_ __ {__       {__ {__    {__ {__       {__
-    {__      {__{__         {__  {__ __  {__         {__
-                    Mission Control API`;
-    await next();
 });
 
 if (import.meta.main) {
