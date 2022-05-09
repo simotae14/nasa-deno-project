@@ -6,8 +6,13 @@ const app = new Application();
 // define the http port
 const PORT = 8000;
 
+app.use(async (ctx, next) => {
+    await next();
+    console.log(`${ctx.request.method} ${ctx.request.url}`);
+});
+
 // use method of oak
-app.use((ctx) => {
+app.use(async (ctx, next) => {
     // send a response
     ctx.response.body = `
     {___     {__      {_         {__ __        {_
@@ -18,6 +23,7 @@ app.use((ctx) => {
     {__    {_ __ {__       {__ {__    {__ {__       {__
     {__      {__{__         {__  {__ __  {__         {__
                     Mission Control API`;
+    await next();
 });
 
 if (import.meta.main) {
