@@ -22,6 +22,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(api.routes());
+app.use(api.allowedMethods());
 
 // serving static files
 app.use(async (ctx) => {
